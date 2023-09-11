@@ -2,10 +2,11 @@
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
-
+import { useRouter } from "next/navigation";
 import { tools } from "@/constants";
 
 export default function Dashboardpage() {
+  const router = useRouter();
   return (
     <div>
       <div className="mb-8 space-y-4">
