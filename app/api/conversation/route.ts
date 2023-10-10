@@ -46,9 +46,9 @@ export async function POST(req: Request) {
             messages,
         });
 
-        // if (!isPro) {
-        //   await incrementApiLimit();
-        // }
+        if (true) {
+            await incrementApiLimit();
+        }
 
         return NextResponse.json(response.data.choices[0].message);
     } catch (error) {
