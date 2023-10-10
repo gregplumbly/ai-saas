@@ -27,25 +27,28 @@ export async function POST(req: Request) {
         // const isPro = await checkSubscription();
 
         // if (!freeTrial && !isPro) {
-        //   return new NextResponse("Free trial has expired. Please upgrade to pro.", { status: 403 });
+        //     return new NextResponse(
+        //         "Free trial has expired. Please upgrade to pro.",
+        //         { status: 403 }
+        //     );
         // }
 
         const response = await replicate.run(
-            "riffusion/riffusion:8cf61ea6c56afd61d8f5b9ffd14d7c216c0a93844ce2d82ac1c9ecc9c7f24e05",
+            "anotherjesse/zeroscope-v2-xl:71996d331e8ede8ef7bd76eba9fae076d31792e4ddf4ad057779b443d6aea62f",
             {
                 input: {
-                    prompt_a: prompt,
+                    prompt,
                 },
             }
         );
 
         // if (!isPro) {
-        //   await incrementApiLimit();
+        //     await incrementApiLimit();
         // }
 
         return NextResponse.json(response);
     } catch (error) {
-        console.log("[MUSIC_ERROR]", error);
+        console.log("[VIDEO_ERROR]", error);
         return new NextResponse("Internal Error", { status: 500 });
     }
 }
