@@ -61,6 +61,6 @@ export const getApiLimitCount = async () => {
     if (!userApiLimit) {
         return 0;
     }
-
+    console.log("getApiLimitCount: ", userApiLimit.count);
     return userApiLimit.count;
 };
