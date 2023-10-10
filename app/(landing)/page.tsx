@@ -1,24 +1,15 @@
-import React from "react";
-import Link from "next/link";
-
-import { Button } from "@/components/ui/button";
+import { LandingNavbar } from "@/components/landing-navbar";
+import { LandingHero } from "@/components/landing-hero";
+import { LandingContent } from "@/components/landing-content";
 
 const LandingPage = () => {
-  return (
-    <>
-      <div>LandingPage unprotected</div>
-      <Link href="/sign-up">
-        <Button variant="outline" className="rounded-full">
-          Sign up
-        </Button>
-      </Link>
-      <Link href="/sign-in">
-        <Button variant="outline" className="rounded-full">
-          Sign in
-        </Button>
-      </Link>
-    </>
-  );
+    return (
+        <div className="h-full ">
+            <LandingNavbar />
+            <LandingHero />
+            <LandingContent />
+        </div>
+    );
 };
 
 export default LandingPage;
