@@ -11,16 +11,17 @@ export const LandingHero = () => {
 
     return (
         <div className="text-white font-bold py-36 text-center space-y-5">
-            <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl space-y-5 font-extrabold">
-                <h1>The Best AI Tool for</h1>
-                <div className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">
+            <div className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl space-y-5 font-extrabold">
+                <h1>Playing with AI apis and Nextjs </h1>
+                <div className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 my-4">
                     <TypewriterComponent
                         options={{
                             strings: [
-                                "Chatbot.",
-                                "Photo Generation.",
-                                "Blog Writing.",
-                                "Mail Writing.",
+                                "Chatbot (gpt-3.5-turbo)",
+                                "Code help (gpt-3.5-turbo)",
+                                "Image Generation(gpt-3.5-turbo)",
+                                "Video Generation(zeroscope-v2-xl)",
+                                "Music Generation(riffusion)",
                             ],
                             autoStart: true,
                             loop: true,
@@ -29,7 +30,7 @@ export const LandingHero = () => {
                 </div>
             </div>
             <div className="text-sm md:text-xl font-light text-zinc-400">
-                Create content using AI 10x faster.
+                Create content using AI.
             </div>
             <div>
                 <Link href={isSignedIn ? "/dashboard" : "/sign-up"}>
