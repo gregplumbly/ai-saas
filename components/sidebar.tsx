@@ -7,7 +7,8 @@ import {
     Code,
     ImageIcon,
     LayoutDashboard,
-    MessageSquare,
+    MessageCircle,
+    MessagesSquare,
     Music,
     Settings,
     VideoIcon,
@@ -28,8 +29,14 @@ const routes = [
     },
     {
         label: "Conversation",
-        icon: MessageSquare,
+        icon: MessagesSquare,
         href: "/conversation",
+        color: "text-violet-500",
+    },
+    {
+        label: "Text to Speech",
+        icon: MessageCircle,
+        href: "/text-to-speech",
         color: "text-violet-500",
     },
     {

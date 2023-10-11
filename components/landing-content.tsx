@@ -13,7 +13,7 @@ const testimonials = [
         name: "Antonio",
         avatar: "A",
         title: "Designer",
-        description: "blah blah blah!",
+        description: "blah blah blah more blah!",
     },
     {
         name: "Mark",

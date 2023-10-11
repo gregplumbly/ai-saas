@@ -10,7 +10,7 @@ import { UserAvatar } from "@/components/user-avatar";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { MessageSquare } from "lucide-react";
+import { MessagesSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ChatCompletionRequestMessage } from "openai";
 import { useState } from "react";
@@ -66,7 +66,7 @@ const ConversationPage = () => {
             <Heading
                 title="Conversation"
                 description="Our most advanced conversation model."
-                icon={MessageSquare}
+                icon={MessagesSquare}
                 iconColor="text-violet-500"
                 bgColor="bg-violet-500/10"
             />
