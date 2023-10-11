@@ -32,7 +32,6 @@ export async function POST(req: Request) {
                 { status: 403 }
             );
         }
-        console.log("making request to replicate", prompt);
 
         const response = await replicate.run(
             "afiaka87/tortoise-tts:e9658de4b325863c4fcdc12d94bb7c9b54cbfe351b7ca1b36860008172b91c71",
@@ -47,10 +46,8 @@ export async function POST(req: Request) {
             await incrementApiLimit();
         }
 
-        console.log("replicate response", response);
         return NextResponse.json(response);
     } catch (error) {
-        console.log("[MUSIC_ERROR]", error);
         return new NextResponse("Internal Error", { status: 500 });
     }
 }

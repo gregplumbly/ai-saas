@@ -48,7 +48,6 @@ const CodePage = () => {
 
       form.reset();
     } catch (error: any) {
-      console.log(error);
       if (error?.response?.status === 403) {
         // proModal.onOpen();
       } else {

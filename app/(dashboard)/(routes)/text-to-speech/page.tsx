@@ -36,10 +36,8 @@ const MusicPage = () => {
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             setMusic(undefined);
-            console.log(values);
 
             const response = await axios.post("/api/text-to-speech", values);
-            console.log("replicate response", response);
 
             setMusic(response.data);
             form.reset();
