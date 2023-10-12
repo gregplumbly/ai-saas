@@ -5,6 +5,10 @@ import { NextResponse } from "next/server";
 import { incrementApiLimit, checkApiLimit } from "@/lib/api-limit";
 import { checkSubscription } from "@/lib/subscription";
 
+const HOST = process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000"; // or ngrok url
+
 const replicate = new Replicate({
     auth: process.env.REPLICATE_API_TOKEN!,
 });
@@ -39,6 +43,7 @@ export async function POST(req: Request) {
                 input: {
                     prompt_a: prompt,
                 },
+                webhook: `${HOST}/api/replicate-webhook`,
             }
         );
 
