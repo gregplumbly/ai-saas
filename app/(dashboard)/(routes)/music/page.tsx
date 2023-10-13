@@ -23,7 +23,6 @@ const MusicPage = () => {
     const proModal = useProModal();
     const router = useRouter();
     const [music, setMusic] = useState<string>();
-
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
