@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
@@ -20,6 +20,8 @@ import { useProModal } from "@/hooks/use-pro-modal";
 import { formSchema } from "./constants";
 
 const MusicPage = () => {
+    const [userGenerations, setUserGenerations] = useState([]);
+
     const proModal = useProModal();
     const router = useRouter();
     const [music, setMusic] = useState<string>();
@@ -31,6 +33,12 @@ const MusicPage = () => {
     });
 
     const isLoading = form.formState.isSubmitting;
+
+    useEffect(() => {
+        fetch("/api/userGenerations")
+            .then((response) => response.json())
+            .then((data) => setUserGenerations(data.userGenerations));
+    }, []);
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
@@ -60,6 +68,7 @@ const MusicPage = () => {
                 iconColor="text-emerald-500"
                 bgColor="bg-emerald-500/10"
             />
+
             <div className="px-4 lg:px-8">
                 <Form {...form}>
                     <form
@@ -107,12 +116,18 @@ const MusicPage = () => {
                         <Loader />
                     </div>
                 )}
-                {!music && !isLoading && <Empty label="No music generated." />}
-                {music && (
-                    <audio controls className="w-full mt-8">
-                        <source src={music} />
-                    </audio>
-                )}
+                {/* {!music && !isLoading && <Empty label="No music generated." />} */}
+
+                <div>
+                    {userGenerations.map((generation, index) => (
+                        <div key={index}>
+                            {/* Render your generation data here. For example: */}
+                            <audio controls className="w-full mt-8">
+                                <source src="https://replicate.delivery/pbxt/uPjE7eUfHWh2N0C501pu3KYn0fGdidvrsQCHe8ueerSqUQibE/gen_sound.wav" />
+                            </audio>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

@@ -28,4 +28,5 @@ model UserGenerations {
     id     String  @id @default(cuid())
     userId String
     url    String? @unique
+    type   String  @default("music")
 }
