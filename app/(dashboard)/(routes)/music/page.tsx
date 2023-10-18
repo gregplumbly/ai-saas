@@ -51,24 +51,30 @@ const MusicPage = () => {
     }, []);
 
 
-    const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        try {
-            setMusic(undefined);
+const onSubmit = (values: z.infer<typeof formSchema>) => {
+    try {
+        setMusic(undefined);
 
-            const response = await axios.post("/api/music", values);
+        axios.post("/api/music", values)
+            .then(response => {
+                setMusic(response.data.audio);
+                form.reset();
+            })
+            .catch(error => {
+                if (error?.response?.status === 403) {
+                    proModal.onOpen();
+                } else {
+                    toast.error("Something went wrong.");
+                }
+            })
+            .finally(() => {
+                router.refresh();
+            });
 
-            setMusic(response.data.audio);
-            form.reset();
-        } catch (error: any) {
-            if (error?.response?.status === 403) {
-                proModal.onOpen();
-            } else {
-                toast.error("Something went wrong.");
-            }
-        } finally {
-            router.refresh();
-        }
-    };
+    } catch (error: any) {
+        toast.error("Something went wrong.");
+    }
+};
 
     console.log(userGenerations);
 
