@@ -25,8 +25,11 @@ model UserSubscription {
 }
 
 model UserGenerations {
-    id     String  @id @default(cuid())
-    userId String
-    url    String? @unique
-    type   String  @default("music")
+    id        String   @id @default(cuid())
+    userId    String
+    prompt    String
+    url       String?  @unique
+    type      String   @default("music")
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }

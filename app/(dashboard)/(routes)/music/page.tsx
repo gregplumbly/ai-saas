@@ -35,10 +35,15 @@ const MusicPage = () => {
     const isLoading = form.formState.isSubmitting;
 
     useEffect(() => {
-        fetch("/api/userGenerations")
-            .then((response) => response.json())
-            .then((data) => setUserGenerations(data.userGenerations));
+        const interval = setInterval(() => {
+            fetch("/api/userGenerations")
+                .then((response) => response.json())
+                .then((data) => setUserGenerations(data.userGenerations));
+                console.log('requesting fresh data from api')
+        }, 3000);
+        return () => clearInterval(interval);
     }, []);
+
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
@@ -58,6 +63,8 @@ const MusicPage = () => {
             router.refresh();
         }
     };
+
+    console.log(userGenerations);
 
     return (
         <div>
@@ -123,7 +130,7 @@ const MusicPage = () => {
                         <div key={index}>
                             {/* Render your generation data here. For example: */}
                             <audio controls className="w-full mt-8">
-                                <source src="https://replicate.delivery/pbxt/uPjE7eUfHWh2N0C501pu3KYn0fGdidvrsQCHe8ueerSqUQibE/gen_sound.wav" />
+                                <source src={generation.url} />
                             </audio>
                         </div>
                     ))}

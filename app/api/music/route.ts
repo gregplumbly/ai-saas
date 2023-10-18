@@ -7,7 +7,7 @@ import { checkSubscription } from "@/lib/subscription";
 
 const HOST = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
-  : "https://d685-82-19-141-108.ngrok-free.app"; // or ngrok url
+  : "https://ddf5-82-19-141-108.ngrok-free.app"; // or ngrok url
 
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN!,
