@@ -6,12 +6,17 @@ import { revalidatePath } from "next/cache";
 
 // Handles POST requests to /api
 export async function POST(request: Request) {
-     console.log("🪝 incoming webhook!", Request);
+     console.log("🪝 incoming webhook!", request);
     const body = await request.json();
     console.log(body)
     const { userId } = auth();
     console.log (userId)
     // const userID = body.webhook.split("=")[1];
+
+    if (!userId) {
+    throw new Error("User ID is null");
+    }
+
 
 
 
