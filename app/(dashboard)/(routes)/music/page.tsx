@@ -23,7 +23,7 @@ const MusicPage = () => {
   const { isLoaded, userId, sessionId, getToken } = useAuth();
   interface UserGeneration {
     url: string;
-    // Add other properties here as per your API response...
+    prompt: string;
   }
   const [userGenerations, setUserGenerations] = useState<UserGeneration[]>([]);
 
@@ -139,6 +139,7 @@ const MusicPage = () => {
           {userGenerations.map((generation, index) => (
             <div key={index}>
               {/* Render your generation data here. For example: */}
+              <p>{generation.prompt}</p>
               <audio controls className="w-full mt-8">
                 <source src={generation.url} />
               </audio>

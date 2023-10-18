@@ -18,6 +18,7 @@ export async function POST(req: Request) {
     const { userId } = auth();
     const body = await req.json();
     const { prompt } = body;
+    const encodedPrompt = encodeURIComponent(prompt);
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -43,7 +44,7 @@ export async function POST(req: Request) {
         input: {
           prompt_a: prompt,
         },
-        webhook: `${HOST}/api/replicate-webhook?userId=${userId}`,
+        webhook: `${HOST}/api/replicate-webhook?userId=${userId}&prompt=${encodedPrompt}`,
       }
     );
 
