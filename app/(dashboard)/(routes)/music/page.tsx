@@ -19,8 +19,14 @@ import { useProModal } from "@/hooks/use-pro-modal";
 
 import { formSchema } from "./constants";
 
+
 const MusicPage = () => {
-    const [userGenerations, setUserGenerations] = useState([]);
+    interface UserGeneration {
+    url: string;
+    // Add other properties here as per your API response...
+}
+    const [userGenerations, setUserGenerations] = useState<UserGeneration[]>([]);
+
 
     const proModal = useProModal();
     const router = useRouter();
