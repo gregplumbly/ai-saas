@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { Music, Send } from "lucide-react";
-
+import { useAuth } from "@clerk/nextjs";
 import { Heading } from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,7 @@ import { useProModal } from "@/hooks/use-pro-modal";
 import { formSchema } from "./constants";
 
 const MusicPage = () => {
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
   interface UserGeneration {
     url: string;
     // Add other properties here as per your API response...
@@ -40,7 +41,7 @@ const MusicPage = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      fetch("/api/userGenerations")
+      fetch(`/api/userGenerations?userId=${userId}`)
         .then((response) => response.json())
         .then((data) => setUserGenerations(data.userGenerations));
       console.log("requesting fresh data from api");

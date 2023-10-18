@@ -11,11 +11,13 @@ export async function POST(request: Request) {
 
   const userID = body.webhook.split("=")[1];
 
+  console.log("userID", userID);
+
   if (!userID) {
     throw new Error("User ID is null");
   }
 
-  // download the audio file
+  console.log("download the audio file");
   const audio = await fetch(body.output.audio);
   const audioBuffer = await audio.arrayBuffer();
   console.log("audioBuffer", audioBuffer);
@@ -23,6 +25,7 @@ export async function POST(request: Request) {
 
   const { url } = await put("myAudioFile", blob, { access: "public" });
 
+  console.log("save to database");
   await prismadb.userGenerations.create({
     data: {
       userId: userID,
@@ -31,5 +34,5 @@ export async function POST(request: Request) {
     },
   });
 
-  return NextResponse.json({ message: "Hello World" });
+  return NextResponse.json({ message: "success" });
 }

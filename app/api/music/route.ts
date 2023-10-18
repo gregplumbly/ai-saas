@@ -7,7 +7,7 @@ import { checkSubscription } from "@/lib/subscription";
 
 const HOST = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
-  : "https://ddf5-82-19-141-108.ngrok-free.app"; // or ngrok url
+  : "https://f460-82-19-141-108.ngrok-free.app"; // or ngrok url
 
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN!,
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
         input: {
           prompt_a: prompt,
         },
-        webhook: `${HOST}/api/replicate-webhook?userId=${userId}&type=music`,
+        webhook: `${HOST}/api/replicate-webhook?userId=${userId}`,
       }
     );
 

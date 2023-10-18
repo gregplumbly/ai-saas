@@ -3,13 +3,22 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export async function GET(req: NextRequest, res: NextResponse) {
-    const userGenerations = await prisma.userGenerations.findMany({
-        where: {
-            userId: "user_2WaEuGZIDaUQn7lyUHyhAVBRsGP&type",
-        },
-    });
-    console.log(userGenerations);
+export async function GET(req: NextRequest) {
+  // Extract userId from the query parameters
+  const url = new URL(req.url);
 
-    return new NextResponse(JSON.stringify({ userGenerations }));
+  const userID = url.searchParams.get("userId");
+
+  // Check if userId is provided
+  if (!userID) {
+    return NextResponse.error();
+  }
+
+  const userGenerations = await prisma.userGenerations.findMany({
+    where: {
+      userId: userID,
+    },
+  });
+
+  return new NextResponse(JSON.stringify({ userGenerations }));
 }
