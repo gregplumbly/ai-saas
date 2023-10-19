@@ -139,8 +139,8 @@ const MusicPage = () => {
           {userGenerations.map((generation, index) => (
             <div key={index}>
               {/* Render your generation data here. For example: */}
-              <p>{generation.prompt}</p>
-              <audio controls className="w-full mt-8">
+              <p className="mt-4">{generation.prompt}</p>
+              <audio controls className="w-full mt-2">
                 <source src={generation.url} />
               </audio>
             </div>

@@ -19,7 +19,7 @@ export async function POST(request: Request) {
   console.log("🪝 incoming webhook!", request);
   const body = await request.json();
   console.log("body. webook", body.webhook);
-  const userID = body.webhook.split("=")[1];
+  const userID = body.webhook.split("=")[1].split("&")[0];
   const encodedPrompt = body.webhook.split("&")[1].split("=")[1];
   const prompt = decodeURIComponent(encodedPrompt);
   const sanitizedPrompt = sanitizeInput(prompt);

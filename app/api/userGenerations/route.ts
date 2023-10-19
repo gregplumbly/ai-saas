@@ -18,6 +18,9 @@ export async function GET(req: NextRequest) {
     where: {
       userId: userID,
     },
+    orderBy: {
+      createdAt: "desc", // Or replace 'createdAt' with the field you want to sort by
+    },
   });
 
   return new NextResponse(JSON.stringify({ userGenerations }));
