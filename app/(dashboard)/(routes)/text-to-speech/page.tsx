@@ -130,7 +130,7 @@ const TTSPage = () => {
             {/* Render your generation data here. For example: */}
             <p className="mt-4">{generation.prompt}</p>
             <audio controls className="w-full mt-2">
-              <source src={generation.url} />
+              <source src={generation.url} type="audio/mpeg" />
             </audio>
           </div>
         ))}
