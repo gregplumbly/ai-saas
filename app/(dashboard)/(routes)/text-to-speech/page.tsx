@@ -2,13 +2,13 @@
 
 import * as z from "zod";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { MessageCircle } from "lucide-react";
-
+import { useAuth } from "@clerk/nextjs";
 import { Heading } from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,53 +19,69 @@ import { useProModal } from "@/hooks/use-pro-modal";
 
 import { formSchema } from "./constants";
 
-const MusicPage = () => {
-    const proModal = useProModal();
-    const router = useRouter();
-    const [music, setMusic] = useState<string>();
+const TTSPage = () => {
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
+  interface UserGeneration {
+    url: string;
+    prompt: string;
+  }
+  const proModal = useProModal();
+  const router = useRouter();
+  const [music, setMusic] = useState<string>();
+  const [userGenerations, setUserGenerations] = useState<UserGeneration[]>([]);
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            prompt: "",
-        },
-    });
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      prompt: "",
+    },
+  });
 
-    const isLoading = form.formState.isSubmitting;
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetch(`/api/userGenerations?userId=${userId}&type=tts`)
+        .then((response) => response.json())
+        .then((data) => setUserGenerations(data.userGenerations));
+      console.log("requesting fresh data from api");
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
-    const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        try {
-            setMusic(undefined);
+  const isLoading = form.formState.isSubmitting;
 
-            const response = await axios.post("/api/text-to-speech", values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      setMusic(undefined);
 
-            setMusic(response.data);
-            form.reset();
-        } catch (error: any) {
-            if (error?.response?.status === 403) {
-                proModal.onOpen();
-            } else {
-                toast.error("Something went wrong.");
-            }
-        } finally {
-            router.refresh();
-        }
-    };
+      const response = await axios.post("/api/text-to-speech", values);
 
-    return (
-        <div>
-            <Heading
-                title="Text to Speech"
-                description="Turn your text into spoken audio."
-                icon={MessageCircle}
-                iconColor="text-emerald-500"
-                bgColor="bg-emerald-500/10"
-            />
-            <div className="px-4 lg:px-8">
-                <Form {...form}>
-                    <form
-                        onSubmit={form.handleSubmit(onSubmit)}
-                        className="
+      setMusic(response.data);
+      form.reset();
+    } catch (error: any) {
+      if (error?.response?.status === 403) {
+        proModal.onOpen();
+      } else {
+        toast.error("Something went wrong.");
+      }
+    } finally {
+      router.refresh();
+    }
+  };
+
+  return (
+    <div>
+      <Heading
+        title="Text to Speech"
+        description="Turn your text into spoken audio."
+        icon={MessageCircle}
+        iconColor="text-emerald-500"
+        bgColor="bg-emerald-500/10"
+      />
+      <div className="px-4 lg:px-8">
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="
               rounded-lg 
               border 
               w-full 
@@ -77,46 +93,50 @@ const MusicPage = () => {
               grid-cols-12
               gap-2
             "
-                    >
-                        <FormField
-                            name="prompt"
-                            render={({ field }) => (
-                                <FormItem className="col-span-12 lg:col-span-10">
-                                    <FormControl className="m-0 p-0">
-                                        <Input
-                                            className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
-                                            disabled={isLoading}
-                                            placeholder="Enter your text here."
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                </FormItem>
-                            )}
-                        />
-                        <Button
-                            className="col-span-12 lg:col-span-2 w-full"
-                            type="submit"
-                            disabled={isLoading}
-                            size="icon"
-                        >
-                            Generate
-                        </Button>
-                    </form>
-                </Form>
-                {isLoading && (
-                    <div className="p-20">
-                        <Loader />
-                    </div>
-                )}
-                {!music && !isLoading && <Empty label="No audio generated." />}
-                {music && (
-                    <audio controls className="w-full mt-8">
-                        <source src={music} />
-                    </audio>
-                )}
-            </div>
-        </div>
-    );
+          >
+            <FormField
+              name="prompt"
+              render={({ field }) => (
+                <FormItem className="col-span-12 lg:col-span-10">
+                  <FormControl className="m-0 p-0">
+                    <Input
+                      className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
+                      disabled={isLoading}
+                      placeholder="Enter your text here."
+                      {...field}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <Button
+              className="col-span-12 lg:col-span-2 w-full"
+              type="submit"
+              disabled={isLoading}
+              size="icon"
+            >
+              Generate
+            </Button>
+          </form>
+        </Form>
+        {isLoading && (
+          <div className="p-20">
+            <Loader />
+          </div>
+        )}
+        {!music && !isLoading && <Empty label="No audio generated." />}
+        {userGenerations.map((generation, index) => (
+          <div key={index}>
+            {/* Render your generation data here. For example: */}
+            <p className="mt-4">{generation.prompt}</p>
+            <audio controls className="w-full mt-2">
+              <source src={generation.url} />
+            </audio>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
-export default MusicPage;
+export default TTSPage;

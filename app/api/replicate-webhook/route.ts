@@ -21,6 +21,7 @@ export async function POST(request: Request) {
   console.log("body. webook", body.webhook);
   const userID = body.webhook.split("=")[1].split("&")[0];
   const encodedPrompt = body.webhook.split("&")[1].split("=")[1];
+  const type = body.webhook.split("&")[2].split("=")[1];
   const prompt = decodeURIComponent(encodedPrompt);
   const sanitizedPrompt = sanitizeInput(prompt);
   console.log("userID", userID);
@@ -29,15 +30,21 @@ export async function POST(request: Request) {
     throw new Error("User ID is null");
   }
 
-  console.log("download the audio file");
-  const audio = await fetch(body.output.audio);
+  let audio;
+
+  if (type === "tts") {
+    audio = await fetch(body.output);
+  } else if (type === "music") {
+    audio = await fetch(body.output.audio);
+  } else {
+    throw new Error(`Invalid type: ${type}`);
+  }
+
   const audioBuffer = await audio.arrayBuffer();
-  console.log("audioBuffer", audioBuffer);
   const blob = new Blob([audioBuffer]);
 
   const { url } = await put("myAudioFile", blob, { access: "public" });
 
-  console.log("check if record already exists");
   const existingRecord = await prismadb.userGenerations.findFirst({
     where: {
       userId: userID,
@@ -54,6 +61,7 @@ export async function POST(request: Request) {
         userId: userID,
         url: url,
         prompt: prompt,
+        type: type,
       },
     });
   }

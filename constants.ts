@@ -1,6 +1,6 @@
 import { Code, ImageIcon, MessageSquare, Music, VideoIcon } from "lucide-react";
 
-export const MAX_FREE_COUNTS = 15;
+export const MAX_FREE_COUNTS = 115;
 
 export const tools = [
   {

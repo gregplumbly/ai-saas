@@ -26,7 +26,6 @@ const MusicPage = () => {
     prompt: string;
   }
   const [userGenerations, setUserGenerations] = useState<UserGeneration[]>([]);
-
   const proModal = useProModal();
   const router = useRouter();
   const [music, setMusic] = useState<string>();
@@ -37,8 +36,6 @@ const MusicPage = () => {
     },
   });
 
-  const isLoading = form.formState.isSubmitting;
-
   useEffect(() => {
     const interval = setInterval(() => {
       fetch(`/api/userGenerations?userId=${userId}`)
@@ -48,6 +45,8 @@ const MusicPage = () => {
     }, 3000);
     return () => clearInterval(interval);
   }, []);
+
+  const isLoading = form.formState.isSubmitting;
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     try {
@@ -133,7 +132,7 @@ const MusicPage = () => {
             <Loader />
           </div>
         )}
-        {/* {!music && !isLoading && <Empty label="No music generated." />} */}
+        {!music && !isLoading && <Empty label="Make a new generation" />}
 
         <div>
           {userGenerations.map((generation, index) => (

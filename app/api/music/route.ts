@@ -44,7 +44,7 @@ export async function POST(req: Request) {
         input: {
           prompt_a: prompt,
         },
-        webhook: `${HOST}/api/replicate-webhook?userId=${userId}&prompt=${encodedPrompt}`,
+        webhook: `${HOST}/api/replicate-webhook?userId=${userId}&prompt=${encodedPrompt}&type=music`,
       }
     );
 
