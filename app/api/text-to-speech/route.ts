@@ -1,17 +1,15 @@
-import Replicate from "replicate";
+import fs from "fs";
+import path from "path";
 import { auth } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 
 import { incrementApiLimit, checkApiLimit } from "@/lib/api-limit";
 import { checkSubscription } from "@/lib/subscription";
+import { OpenAI } from "openai";
 
-const HOST = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "https://139f-82-19-141-108.ngrok-free.app"; // or ngrok url
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-const replicate = new Replicate({
-  auth: process.env.REPLICATE_API_TOKEN!,
-});
+const speechFile = path.resolve("./public/speech.mp3");
 
 export async function POST(req: Request) {
   try {
@@ -19,8 +17,6 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { prompt } = body;
     const encodedPrompt = encodeURIComponent(prompt);
-
-    console.log("prompt", prompt);
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -40,25 +36,17 @@ export async function POST(req: Request) {
       );
     }
 
-    const response = await replicate.predictions.create({
-      version:
-        "e9658de4b325863c4fcdc12d94bb7c9b54cbfe351b7ca1b36860008172b91c71",
-      input: {
-        text: prompt,
-      },
-      webhook: `${HOST}/api/replicate-webhook?userId=${userId}&prompt=${encodedPrompt}&type=tts`,
-      webhook_events_filter: ["completed"],
+    const mp3 = await openai.audio.speech.create({
+      model: "tts-1",
+      voice: "alloy",
+      input: prompt,
     });
 
-    // const response = await replicate.run(
-    //   "afiaka87/tortoise-tts:e9658de4b325863c4fcdc12d94bb7c9b54cbfe351b7ca1b36860008172b91c71",
-    //   {
-    //     input: {
-    //       prompt_a: prompt,
-    //     },
-    //     webhook: `${HOST}/api/replicate-webhook?userId=${userId}&prompt=${encodedPrompt}&type=tts`,
-    //   }
-    // );
+    console.log("mp3", mp3);
+
+    console.log(speechFile);
+    const buffer = Buffer.from(await mp3.arrayBuffer());
+    await fs.promises.writeFile(speechFile, buffer);
 
     if (!isPro) {
       await incrementApiLimit();
